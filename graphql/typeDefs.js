@@ -49,7 +49,7 @@ module.exports = gql`
   # root types: entry points to a GraphQL API (Query, Mutation, Subscription)
   # the schema’s root types determine the shape of the queries and mutations that will be accepted by the server.
   type Query {
-    # getPosts: [Post]
+    getPosts: [Post]
     getPost(postId: ID!): Post!
     getUsers: [User]
     getUser(userId: ID!): User!
