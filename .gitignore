@@ -1,2 +1,4 @@
 .DS_Store
 configs/.env
+.vscode/
+node_modules/
