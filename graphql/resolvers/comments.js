@@ -4,8 +4,10 @@ const checkAuth = require("../../utils/check_auth");
 const { validateComment } = require("../../validations/comment_validations");
 
 module.exports = {
+  Query: {},
   Mutation: {
     createComment: async (parent, args, context) => {
+      console.log("commenting ....");
       const user = checkAuth(context);
 
       const { isValid, errors } = validateComment(args);
@@ -15,7 +17,7 @@ module.exports = {
           const post = await Post.findById(args.postId);
           post.comments.unshift({
             body: args.body,
-            username: user.username,
+            author: user.id,
             createdAt: new Date().toISOString(),
           });
           await post.save();

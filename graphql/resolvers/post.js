@@ -27,8 +27,12 @@ module.exports = {
     },
 
     async getPost(parent, args) {
+      console.log("getting single post");
       try {
-        const post = await Post.findById(args.postId);
+        const post = await Post.findById(args.postId).populate({
+          path: "comments",
+          populate: { path: "author" },
+        });
         if (post) {
           return post;
         } else {
@@ -79,7 +83,7 @@ module.exports = {
           JSON.stringify(post.author) === user.id
         );
 
-        if (user.id === post.author) {
+        if (user.id === post.author.toString()) {
           console.log("yay im in");
           await post.delete();
           return post;
@@ -92,19 +96,19 @@ module.exports = {
     },
     likePost: async (prarent, args, context) => {
       const user = checkAuth(context);
-      console.log("liking post", context.req.headers);
+      console.log("liking post", user);
 
       if (user) {
         const post = await Post.findById(args.postId);
         if (post) {
-          if (post.likes.find((like) => like.username === user.username)) {
+          if (post.likes.find((like) => like.author.toString() === user.id)) {
             // post already been liked, unlike it
             post.likes = post.likes.filter(
-              (like) => like.username !== user.username
+              (like) => like.author.toString() !== user.id
             );
           } else {
             post.likes.push({
-              username: user.username,
+              author: user.id,
               createdAt: new Date().toISOString(),
             });
           }

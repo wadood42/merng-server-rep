@@ -36,7 +36,7 @@ module.exports = gql`
   type Comment {
     id: ID!
     body: String!
-    author: String!
+    author: User!
     createdAt: String!
   }
 
@@ -53,6 +53,7 @@ module.exports = gql`
     getPost(postId: ID!): Post!
     getUsers: [User]
     getUser(userId: ID!): User!
+    getComment(commentId: ID!): Comment!
   }
 
   type Mutation {
